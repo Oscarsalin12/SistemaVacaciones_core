@@ -1,0 +1,20 @@
+﻿@model Proyecto_Estadias.ViewModels.MotivosAusenciaVM
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formMotivo" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    <div class="form-group">
+        @Html.LabelFor(m => m.NombreMotivo)
+        @Html.TextBoxFor(m => m.NombreMotivo, new { @class = "form-control", id = "txtNombre" })
+        @Html.ValidationMessageFor(m => m.NombreMotivo, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-check mt-3">
+        @Html.CheckBoxFor(m => m.BitDescuentoDias, new { @class = "form-check-input", id = "chkDescuento" })
+        @Html.LabelFor(m => m.BitDescuentoDias, new { @class = "form-check-label" })
+    </div>
+
+    <div class="form-check mt-3">
+        @Html.CheckBoxFor(m => m.BitDescuentoHoras, new { @class = "form-check-input", id = "chkDescuento" })
+        @Html.LabelFor(m => m.BitDescuentoHoras, new { @class = "form-check-label" })
+    </div>
+}

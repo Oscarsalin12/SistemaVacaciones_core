@@ -1,0 +1,239 @@
+﻿@model List<Proyecto_Estadias.ViewModels.SubEmpresasVM>
+@using Proyecto_Estadias.Models
+@{
+    ViewBag.Title = "Selecciona una subempresa";
+
+    // LÓGICA PARA VERIFICAR SI ES ADMIN
+    bool esAdministrador = false;
+    if (User.Identity.IsAuthenticated)
+    {
+        // Si es la cuenta maestra, le damos permiso de todo
+        if (User.Identity.Name == "Admin")
+        {
+            esAdministrador = true;
+        }
+        else
+        {
+            // Si es un usuario normal, buscamos en la BD
+            using (var db = new Proyecto_Estadias.Models.Vacaciones_ProyectoEntities())
+            {
+                var currentUser = db.Usuarios.FirstOrDefault(u => u.Usuario == User.Identity.Name);
+                if (currentUser != null && currentUser.BitAdministrador == true)
+                {
+                    esAdministrador = true;
+                }
+            }
+        }
+    }
+}
+
+<div class="container mt-4 mb-3">
+    @Html.ActionLink("⬅ Volver a Empresas", "Perfil", "Auth", null, new { @class = "btn btn-secondary", style = "border-radius: 8px;" })
+</div>
+
+<div class="container subempresa-container">
+    <h2 class="subempresa-header">@ViewBag.EmpresaMadre - Subempresas</h2>
+
+    @* AQUÍ APLICAMOS LA RESTRICCIÓN DEL BOTÓN *@
+    @if (esAdministrador)
+    {
+        <div class="text-center mb-4">
+            <button type="button" class="btn btn-gradient-auto"
+                    onclick="cargarFormulario('@Url.Action("InsertarSubEmpresa", "Empresas", new { idEmpresaMadre = ViewBag.EmpresaId })', 'Nueva Subempresa')">
+                ➕ Registrar Subempresa
+            </button>
+        </div>
+    }
+
+    <div class="row">
+        @foreach (var sub in Model)
+        {
+            <div class="col-md-4 mb-4 d-flex align-items-stretch">
+                <div class="card card-subempresa w-100">
+                    @if (sub.Logo != null && sub.Logo.Length > 0)
+                    {
+                        <img src="data:image/png;base64,@Convert.ToBase64String(sub.Logo)"
+                             class="card-img-top"
+                             alt="Logo de @sub.Nombre"
+                             style="max-height: 150px; object-fit: contain; padding: 10px;" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/imagenes/no-logo.png"
+                             class="card-img-top"
+                             alt="Sin logo"
+                             style="max-height: 150px; object-fit: contain; padding: 10px;" />
+                    }
+                    <div class="card-body text-center d-flex flex-column">
+                        <h5 class="card-title">@sub.Nombre</h5>
+                        <p class="card-text mb-1"><strong>Sucursal:</strong> @sub.Sucursal</p>
+                        <p class="card-text mb-1"><strong>RFC:</strong> @sub.Rfc</p>
+                        <p class="card-text mb-3"><strong>Dirección:</strong> @sub.Direccion</p>
+                        <div class="mt-auto">
+                            <a href="@Url.Action("ListaEmpleadosSubempresa", "Empleados", new { idSub = sub.Id })" class="btn btn-gradient">
+                                Ver Empleados
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="modal fade" id="modalGeneral" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitulo">Formulario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalCuerpo">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Función para cargar el modal
+        async function cargarFormulario(url, titulo) {
+            const modalElement = document.getElementById('modalGeneral');
+            const cuerpo = document.getElementById('modalCuerpo');
+
+            // Cambiar título
+            document.getElementById('modalTitulo').innerText = titulo;
+            cuerpo.innerHTML = '<div class="text-center">Cargando...</div>';
+
+            // Obtener instancia existente o crear una nueva
+            let modal = bootstrap.Modal.getInstance(modalElement);
+            if (!modal) {
+                modal = new bootstrap.Modal(modalElement);
+            }
+
+            modal.show();
+
+            try {
+                const respuesta = await fetch(url);
+                const html = await respuesta.text();
+                cuerpo.innerHTML = html;
+            } catch (error) {
+                cuerpo.innerHTML = "Error al cargar el formulario.";
+            }
+        }
+
+        // Manejador de formularios dinámicos
+        document.addEventListener('submit', async (e) => {
+            if (e.target.id === 'formGenerico') {
+                e.preventDefault();
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Guardando...';
+
+                try {
+                    const formData = new FormData(e.target);
+                    const res = await fetch(e.target.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    });
+
+                    if (res.ok) {
+                        // Si el controlador devuelve 200 OK
+                        location.reload();
+                    } else {
+                        // Si hay error de validación (400), volvemos a inyectar la parcial con errores
+                        const htmlError = await res.text();
+                        document.getElementById('modalCuerpo').innerHTML = htmlError;
+                    }
+                } catch (error) {
+                    toastr.error('Error de conexión con el servidor');
+                    btn.disabled = false;
+                    btn.innerHTML = 'Guardar';
+                }
+            }
+        });
+    </script>
+}
+
+<style>
+    body {
+        background: #f8f9fa; /* Para igualar el fondo del layout y que resalte la caja blanca */
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .subempresa-container {
+        max-width: 960px;
+        margin: 20px auto 80px auto;
+        padding: 30px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .subempresa-header {
+        font-size: 28px;
+        font-weight: 700;
+        text-align: center;
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        padding: 20px 15px;
+        border-radius: 15px 15px 10px 10px;
+        margin-bottom: 30px;
+    }
+
+    .card-subempresa {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .card-subempresa:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(148, 0, 211, 0.4);
+        }
+
+        .card-subempresa .card-title {
+            font-weight: 700;
+            font-size: 20px;
+            color: #222;
+        }
+
+    /* Botón ancho para las tarjetas */
+    .btn-gradient {
+        color: white !important;
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border: none;
+        padding: 10px 0;
+        font-weight: 600;
+        border-radius: 50px;
+        width: 100%;
+        transition: background 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #4b0082, #0000ff);
+            box-shadow: 0 4px 10px rgba(75, 0, 130, 0.5);
+        }
+
+    /* Botón de ancho automático para el "Registrar Subempresa" */
+    .btn-gradient-auto {
+        color: white !important;
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border: none;
+        padding: 10px 25px;
+        font-weight: 600;
+        border-radius: 50px;
+        transition: background 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+        .btn-gradient-auto:hover {
+            background: linear-gradient(to right, #4b0082, #0000ff);
+            box-shadow: 0 4px 10px rgba(75, 0, 130, 0.5);
+        }
+</style>

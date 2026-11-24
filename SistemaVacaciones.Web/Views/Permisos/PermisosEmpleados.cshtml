@@ -1,0 +1,125 @@
+﻿@model PagedList.IPagedList<SistemaVacaciones.Core.ViewModels.PermisosPdfVM>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Solicitudes Pendientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // lo pasamos al paginador y botones
+}
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<style>
+    .page-container {
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+    .card-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 15px;
+    }
+
+    .btn-sm {
+        border-radius: 8px;
+    }
+
+    .btn-approve {
+        background: #28a745;
+        color: white;
+        border: none;
+    }
+
+    .btn-reject {
+        background: #dc3545;
+        color: white;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border: none;
+    }
+
+    .pagination-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination > li > a, .pagination > li > span {
+        border-radius: 6px !important;
+        margin: 0 3px;
+    }
+
+    table th, table td {
+        vertical-align: middle !important;
+    }
+</style>
+
+@Html.ActionLink(
+    "Volver perfil",
+    "PerfilEmpleado",
+    "Empleados",
+    new { idEmpleado = ViewBag.EmpleadoId },
+    new { @class = "btn btn-primary" }
+)
+
+<div class="page-container">
+    <div class="card shadow">
+        <div class="card-header text-center">
+            Solicitudes de permisos
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>N.Emp</th>
+                            <th>Empleado</th>
+                            <th>Empresa</th>
+                            <th>Motivo</th>
+                            <th>Fecha de Generacion</th>
+                            <th>Inicio</th>
+                            <th>Final</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
+                            <tr class="text-center">
+                                <td>@p.Empleados.NumEmpleado</td>
+                                <td>@p.Empleados.Nombre</td>
+                                <td>@p.SubEmpresas.Nombre</td>
+                                <td>@p.MotivosAusencia.NombreMotivo</td>
+                                <td>@p.FechaGeneracion.ToShortDateString()</td>
+                                <td>@p.FechaInicio.ToString("dd/MM/yyyy")</td>
+                                <td>@p.FechaFinal.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @p.Estado
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-container">
+                @Html.PagedListPager(Model, page => Url.Action("PermisosEmpleados",
+                    new { page, idEmpleado = ViewBag.EmpleadoId }),
+                    new PagedListRenderOptions
+                    {
+                        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                        DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                        MaximumPageNumbersToDisplay = 5,
+                        UlElementClasses = new[] { "pagination justify-content-center" },
+                        LiElementClasses = new[] { "page-item" }
+                    })
+            </div>
+        </div>
+    </div>
+</div>

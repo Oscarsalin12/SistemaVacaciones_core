@@ -1,0 +1,295 @@
+﻿@model List<Proyecto_Estadias.ViewModels.UsuariosVM>
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<style>
+    /* Estilos del contenedor principal para dar fondo blanco y bordes redondeados */
+    .content-box {
+        background-color: white;
+        padding: 30px;
+        margin: 40px auto;
+        border-radius: 15px;
+        max-width: 1400px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        overflow-x: auto;
+    }
+
+    /* Estilo del encabezado con el degradado de azul a morado */
+    .content-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Unificar estilos de botones */
+    .btn-gradient {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border: none;
+        color: white;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-weight: 500;
+        transition: background 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #5a379e, #0000ff);
+            color: white;
+        }
+
+    .btn-success {
+        border-radius: 8px;
+    }
+
+    /* Unificar estilos de tablas */
+    table.table {
+        border: 1px solid #dee2e6;
+    }
+
+    table th, table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    table thead {
+        background-color: #343a40;
+        color: white;
+        margin-top: 15px;
+        border: none;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    /* Reestilizar el encabezado del modal para tener el degradado */
+    #modalGeneral .modal-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        padding: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom: none;
+        text-align: center;
+    }
+
+    #modalGeneral .modal-title {
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    /* Reestilizar el nav-tabs Bootstrap predeterminado */
+    .nav-tabs {
+        border-bottom: 2px solid #ddd;
+    }
+
+        .nav-tabs .nav-link {
+            color: #4b0082;
+            font-weight: bold;
+            border: none;
+            border-bottom: 2px solid transparent;
+            padding: 10px 20px;
+        }
+
+            .nav-tabs .nav-link:hover {
+                border-color: transparent;
+                color: #0000ff;
+            }
+
+            .nav-tabs .nav-link.active {
+                color: #0000ff;
+                border: none;
+                border-bottom: 2px solid #0000ff;
+                background-color: transparent;
+            }
+</style>
+
+<div class="content-box">
+    <div class="content-header">
+        Gestión de Accesos
+    </div>
+
+    <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#usuariosTab" type="button" role="tab">Usuarios</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#rolesTab" type="button" role="tab">Roles</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-3">
+        <div class="tab-pane fade show active" id="usuariosTab" role="tabpanel">
+            <div class="text-end mb-3">
+                <button class="btn btn-success" onclick="abrirModal('Usuario', 0)">Nuevo Usuario</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Accesos Asignados</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.Usuario</td>
+                                <td>
+                                    @if (user.UsuariosRolesVMs != null && user.UsuariosRolesVMs.Any())
+                                    {
+                                        <ul class="list-unstyled mb-0">
+                                            @foreach (var acceso in user.UsuariosRolesVMs)
+                                            {
+                                                <li>@acceso.RolesVM.Nombre - @acceso.EmpresaVM.Nombre</li>
+                                            }
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Sin accesos</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("AsignarAccesos", new { id = user.Id })" class="btn btn-sm btn-gradient text-white">Permisos</a>
+                                    <button class="btn btn-sm btn-gradient" onclick="abrirModal('Usuario', @user.Id)">Editar</button>
+                                    <button class="btn btn-sm btn-danger" onclick="eliminarRegistro('Usuario', @user.Id)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="rolesTab" role="tabpanel">
+            <div class="text-end mb-3">
+                <button class="btn btn-success" onclick="abrirModal('Rol', 0)">Nuevo Rol</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped w-100">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Rol</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var rol in ViewBag.Roles)
+                        {
+                            <tr>
+                                <td>@rol.Nombre</td>
+                                <td>
+                                    <button class="btn btn-sm btn-gradient" onclick="abrirModal('Rol', @rol.Id)">Editar</button>
+                                    <button class="btn btn-sm btn-danger" onclick="eliminarRegistro('Rol', @rol.Id)">Eliminar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalGeneral" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header m-0 mb-3">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer" id="modalGeneralFooter">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-dismiss="modal" onclick="$('#modalGeneral').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-gradient" id="btnGuardar">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+    let tipoEntidadActual = ''; // 'Usuario' o 'Rol'
+
+    async function abrirModal(tipoEntidad, id) {
+        tipoEntidadActual = tipoEntidad;
+        const title = id === 0 ? `Nuevo ${tipoEntidad}` : `Editar ${tipoEntidad}`;
+
+        // Determina la URL base según si es Rol o Usuario
+        const baseUrl = tipoEntidad === 'Usuario' ? '@Url.Action("FormUsuario")' : '@Url.Action("FormRol")';
+        const url = id === 0 ? baseUrl : `${baseUrl}?id=${id}`;
+
+        document.getElementById('modalTitle').innerText = title;
+
+        const response = await fetch(url);
+        const html = await response.text();
+        document.getElementById('modalBody').innerHTML = html;
+
+        // Configuramos el evento del botón guardar
+        document.getElementById('btnGuardar').onclick = guardarRegistro;
+
+        $('#modalGeneral').modal('show');
+    }
+
+    async function guardarRegistro() {
+        const formId = tipoEntidadActual === 'Usuario' ? 'formUsuario' : 'formRol';
+        const form = document.getElementById(formId);
+
+        // Truco para checkboxes en MVC con Fetch: Agregar validación de boolean explícita si es necesario
+        const formData = new FormData(form);
+        if(tipoEntidadActual === 'Usuario') {
+            const chk = document.getElementById('chkAdmin');
+            if(chk) { // Solo si existe el checkbox
+                formData.set('BitAdministrador', chk.checked);
+            }
+        }
+
+        const urlPost = tipoEntidadActual === 'Usuario' ? '@Url.Action("SaveUsuario")' : '@Url.Action("SaveRol")';
+
+        const response = await fetch(urlPost, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            $('#modalGeneral').modal('hide');
+            location.reload();
+        } else {
+            alert(result.message || "Ocurrió un error");
+        }
+    }
+
+    async function eliminarRegistro(tipoEntidad, id) {
+        if (!confirm(`¿Seguro que deseas eliminar este ${tipoEntidad}?`)) return;
+
+        const url = tipoEntidad === 'Usuario' ? '@Url.Action("DeleteUsuario")' : '@Url.Action("DeleteRol")';
+
+        // Usamos FormData para enviar el ID fácilmente
+        const fd = new FormData();
+        fd.append('id', id);
+
+        const response = await fetch(url, { method: 'POST', body: fd });
+        const res = await response.json();
+
+        if (res.success) {
+            location.reload();
+        } else {
+            alert(`No se pudo eliminar el ${tipoEntidad}. Verifica dependencias.`);
+        }
+    }
+    </script>
+}

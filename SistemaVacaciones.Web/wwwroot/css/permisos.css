@@ -1,0 +1,28 @@
+/* Estilos para el módulo de Permisos */
+
+.permisos-container {
+    max-width: 1400px;
+    margin: 40px auto;
+}
+
+.btn-reject {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+}
+
+.badge-aprobado {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-pendiente {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.badge-rechazado {
+    background-color: #dc3545;
+    color: white;
+}

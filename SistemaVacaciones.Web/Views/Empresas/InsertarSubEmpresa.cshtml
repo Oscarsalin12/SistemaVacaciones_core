@@ -1,0 +1,132 @@
+﻿@*@model SistemaVacaciones.Core.Entities.SubEmpresa
+
+@{
+    ViewBag.Title = "Insertar SubEmpresas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idSub = ViewBag.IdSub;
+
+}
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<style>
+    body {
+        background: white;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .subempresa-container {
+        background-color: white;
+        padding: 30px;
+        margin: 80px auto;
+        border-radius: 15px;
+        max-width: 700px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .subempresa-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        text-align: center;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border-color: #6F42C1;
+        border-radius: 8px;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a379e;
+            border-color: #5a379e;
+        }
+
+    .btn-default {
+        border-radius: 8px;
+        margin-left: 10px;
+    }
+
+    .text-danger {
+        font-size: 14px;
+    }
+</style>
+
+<div class="subempresa-container">
+    <div class="subempresa-header">
+        Registrar Nueva Subempresa
+    </div>
+
+    @using (Html.BeginForm("InsertarSubEmpresa", "Empresas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Nombre)
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", placeholder = "Nombre de la Subempresa" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Sucursal)
+            @Html.TextBoxFor(m => m.Sucursal, new { @class = "form-control", placeholder = "Nombre de la Surcursal" })
+            @Html.ValidationMessageFor(m => m.Sucursal, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Rfc)
+            @Html.TextBoxFor(m => m.Rfc, new { @class = "form-control", placeholder = "RFC" })
+            @Html.ValidationMessageFor(m => m.Rfc, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Direccion)
+            @Html.TextBoxFor(m => m.Direccion, new { @class = "form-control", placeholder = "Dirección" })
+            @Html.ValidationMessageFor(m => m.Direccion, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.IdEmpresa_madre, "Empresa Madre")
+
+            @if (Model.IdEmpresa_madre > 0)
+            {
+                @Html.DropDownListFor(m => m.IdEmpresa_madre, (SelectList)ViewBag.Empresas,
+                    new { @class = "form-control", disabled = "disabled" })
+                @Html.HiddenFor(m => m.IdEmpresa_madre)  Para enviar el valor al POST 
+            }
+            else
+            {
+                @Html.DropDownListFor(m => m.IdEmpresa_madre, (SelectList)ViewBag.Empresas,
+                    "-- Selecciona una empresa madre --", new { @class = "form-control" })
+            }
+            @Html.ValidationMessageFor(m => m.IdEmpresa_madre, "", new { @class = "text-danger" })
+        </div>
+
+
+
+        <div class="form-group">
+            <label for="archivoLogo">Logo de la empresa</label>
+            <input type="file" name="archivoLogo" class="form-control" />
+        </div>
+
+        <div class="form-group text-center mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Subempresa</button>
+            @Html.ActionLink("Ver Filiales", "SeleccionarSubempresa", "Auth", new { id = idSub }, new { @class = "btn btn btn-primary" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}*@

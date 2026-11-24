@@ -1,0 +1,49 @@
+﻿@model SistemaVacaciones.Core.ViewModels.UsuariosVM
+
+@{
+    ViewBag.Title = "Registro";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+@section Styles {
+    <link href="~/css/auth.css" rel="stylesheet" />
+}
+
+<div class="register-container">
+    <div class="register-header">
+        Crear cuenta
+    </div>
+
+    @using (Html.BeginForm("Account", "Auth", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group mt-3">
+            @Html.LabelFor(model => model.Usuario)
+            @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control", placeholder = "Usuario" })
+            @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Contrasenia)
+            @Html.PasswordFor(model => model.Contrasenia, new { @class = "form-control", placeholder = "Contraseña" })
+            @Html.ValidationMessageFor(model => model.Contrasenia, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Roles")
+            @Html.ListBoxFor(model => model.Roles, (SelectList)ViewBag.Roles, new { @class = "form-control", multiple = "multiple" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Empresas")
+            @Html.ListBoxFor(model => model.Empresas, (SelectList)ViewBag.Empresas, new { @class = "form-control", multiple = "multiple" })
+        </div>
+
+        <div class="form-group text-center">
+            <input type="submit" value="Registrar" class="btn btn-primary" />
+        </div>
+    }
+</div>

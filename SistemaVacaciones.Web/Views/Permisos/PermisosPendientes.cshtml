@@ -1,0 +1,147 @@
+﻿@model PagedList.IPagedList<SistemaVacaciones.Core.ViewModels.PermisosPdfVM>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Solicitudes Pendientes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var empresaId = ViewBag.EmpresaId; // lo pasamos al paginador y botones
+}
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<style>
+    .page-container {
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+    .card-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        padding: 15px;
+    }
+
+    .btn-sm {
+        border-radius: 8px;
+    }
+
+    .btn-approve {
+        background: #28a745;
+        color: white;
+        border: none;
+    }
+
+    .btn-reject {
+        background: #dc3545;
+        color: white;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border: none;
+    }
+
+    .pagination-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination > li > a, .pagination > li > span {
+        border-radius: 6px !important;
+        margin: 0 3px;
+    }
+
+    table th, table td {
+        vertical-align: middle !important;
+    }
+</style>
+
+@Html.ActionLink(
+    "Ver empleados",
+    "ListaEmpleadosSubempresa",
+    "Auth",
+    new { idSub = ViewBag.EmpresaId },
+    new { @class = "btn btn-primary" }
+)
+
+<div class="page-container">
+    <div class="card shadow">
+        <div class="card-header text-center">
+            Solicitudes Pendientes de Aprobación
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>N.Emp</th>
+                            <th>Empleado</th>
+                            <th>Empresa</th>
+                            <th>Motivo</th>
+                            <th>Inicio</th>
+                            <th>Final</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
+                            <tr class="text-center">
+                                <td>@p.Empleados.NumEmpleado</td>
+                                <td>@p.Empleados.Nombre</td>
+                                <td>@p.SubEmpresas.Nombre</td>
+                                <td>@p.MotivosAusencia.NombreMotivo</td>
+                                <td>@p.FechaInicio.ToString("dd/MM/yyyy")</td>
+                                <td>@p.FechaFinal.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @using (Html.BeginForm("CambiarEstado", "Permisos", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        @Html.Hidden("id", p.Id)
+                                        <input type="hidden" name="idEmpresa" value="@empresaId" />
+                                        <button type="submit" name="estado" value="Aprobado" class="btn btn-sm btn-approve">Aprobar</button>
+                                        <button type="submit" name="estado" value="Rechazado" class="btn btn-sm btn-reject">Rechazar</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-container">
+                @Html.PagedListPager(Model, page => Url.Action("PermisosPendientes",
+                    new { page, idEmpresa = empresaId }),
+                    new PagedListRenderOptions
+                    {
+                        DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+                        DisplayLinkToNextPage = PagedListDisplayMode.Always,
+                        DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+                        MaximumPageNumbersToDisplay = 5,
+                        UlElementClasses = new[] { "pagination justify-content-center" },
+                        LiElementClasses = new[] { "page-item" }
+                    })
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            @if (TempData["EstadoActualizado"] != null)
+            {
+                @:toastr.success('Se actualizó el estado correctamente', 'Éxito');
+            }
+            @if (TempData["Error"] != null)
+            {
+                @:toastr.error('@TempData["Error"]', 'Error');
+            }
+        });
+    </script>
+}

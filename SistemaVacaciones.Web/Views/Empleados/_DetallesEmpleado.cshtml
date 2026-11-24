@@ -1,0 +1,31 @@
+﻿@model SistemaVacaciones.Core.Entities.Empleado
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <strong>Nombre:</strong> <p class="text-muted">@Model.Nombre</p>
+            <strong>No. Empleado:</strong> <p class="text-muted">@Model.NumEmpleado</p>
+            <strong>Departamento:</strong> <p class="text-muted">@(Model.Departamentos?.NombreDep ?? "N/A")</p>
+            <strong>Empresa:</strong> <p class="text-muted">@(Model.SubEmpresas?.Nombre ?? "N/A")</p>
+            <strong>Usuario:</strong> <p class="text-muted">@Model.UsuarioEmpleado</p>
+        </div>
+        <div class="col-md-6">
+            <strong>Fecha de Ingreso:</strong> <p class="text-muted">@Model.FechaIDeIngreso.ToShortDateString()</p>
+            <strong>Antigüedad:</strong> <p class="text-muted">@Model.AniosTrabajados Años, @Model.MesesTrabajados Meses</p>
+            <strong>Días de Vacaciones Totales:</strong> <p class="text-muted">@Model.intDiasVacaciones</p>
+            <strong>Días Disponibles Actualmente:</strong> <p class="text-info font-weight-bold">@Model.DiasDisponibles</p>
+        </div>
+    </div>
+    <div class="row border-top pt-2">
+        <div class="col-md-4">
+            <strong>Días Laborales (Semana):</strong> <p class="text-muted">@Model.DiasLaboralesPorSemana</p>
+        </div>
+        <div class="col-md-4">
+            <strong>Horas x Día:</strong> <p class="text-muted">@Model.HorasPorDia</p>
+        </div>
+        <div class="col-md-4">
+            <strong>Estado:</strong>
+            <span class="badge @(Model.Estado == "Activo" ? "bg-success" : "bg-danger")">@Model.Estado</span>
+        </div>
+    </div>
+</div>

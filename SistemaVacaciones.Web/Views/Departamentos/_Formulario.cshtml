@@ -1,0 +1,21 @@
+﻿@model SistemaVacaciones.Core.ViewModels.DepartamentosVM
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "formDepartamento" }))
+{
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="form-group mb-2">
+        @Html.LabelFor(m => m.ClaveDep, "Clave del Departamento")
+        @Html.TextBoxFor(m => m.ClaveDep, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group mb-2">
+        @Html.LabelFor(m => m.NombreDep, "Nombre del Departamento")
+        @Html.TextBoxFor(m => m.NombreDep, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group mb-2">
+        @Html.LabelFor(m => m.NombreEmcargado, "Nombre del Encargado")
+        @Html.TextBoxFor(m => m.NombreEmcargado, new { @class = "form-control" })
+    </div>
+}

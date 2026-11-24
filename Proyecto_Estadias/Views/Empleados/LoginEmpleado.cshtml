@@ -1,0 +1,111 @@
+﻿@model Proyecto_Estadias.ViewModels.EmpleadosLoginVM
+
+@{
+    ViewBag.Title = "Login Empleado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<style>
+    body {
+        background: white;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .login-container {
+        background-color: white;
+        padding: 30px;
+        margin: 80px auto;
+        border-radius: 15px;
+        max-width: 500px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .login-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        text-align: center;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .btn-login {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 16px;
+        margin: 10px;
+        width: 150px;
+    }
+
+        .btn-login:hover {
+            opacity: 0.9;
+        }
+
+    .alert-danger {
+        margin-top: 15px;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-header">
+        Iniciar Sesión Empleado
+    </div>
+
+    @using (Html.BeginForm("LoginEmpleado", "Empleados", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal mt-3">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.usuario, "Nombre")
+                @Html.EditorFor(model => model.usuario, new { htmlAttributes = new { @class = "form-control", placeholder = "Usuario del empleado" } })
+                @Html.ValidationMessageFor(model => model.usuario, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.NumeroEmpleado, "Número de empleado")
+                @Html.PasswordFor(model => model.NumeroEmpleado, new { @class = "form-control", placeholder = "Contraseña de empleado" })
+                @Html.ValidationMessageFor(model => model.NumeroEmpleado, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="btn-container">
+                <button type="submit" class="btn-login">Iniciar sesión</button>
+                @*<a href="@Url.Action("Index", "Home")" class="btn-login" style="background: linear-gradient(to right, #ff416c, #ff4b2b);">Volver</a>*@
+            </div>
+        </div>
+    }
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger text-center">@ViewBag.Error</div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            @if (TempData["LoginExitoso"] != null)
+            {
+                @:toastr.success('Bienvenido', 'Éxito');
+            }
+        });
+    </script>
+}

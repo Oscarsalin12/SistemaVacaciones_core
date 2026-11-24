@@ -1,0 +1,45 @@
+﻿@model SistemaVacaciones.Core.Entities.SubEmpresa
+
+<form id="formGenerico" action="@Url.Action("InsertarSubEmpresa", "Empresas")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    @* Solo el campo oculto, sin listas desplegables *@
+    @Html.HiddenFor(m => m.IdEmpresa_madre)
+
+    <div class="row">
+        <div class="col-md-12 mb-3 text-center">
+            <span class="badge bg-primary">Configurando Subempresa</span>
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label class="form-label fw-bold">Nombre de la Subempresa</label>
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", placeholder = "Ej. Sucursal Centro" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">RFC</label>
+            @Html.TextBoxFor(m => m.Rfc, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label fw-bold">Sucursal</label>
+            @Html.TextBoxFor(m => m.Sucursal, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label class="form-label fw-bold">Dirección</label>
+            @Html.TextBoxFor(m => m.Direccion, new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <label class="form-label fw-bold">Logo</label>
+            <input type="file" name="archivoLogo" class="form-control" accept="image/*" />
+        </div>
+    </div>
+
+    <div class="modal-footer px-0 pb-0">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</form>

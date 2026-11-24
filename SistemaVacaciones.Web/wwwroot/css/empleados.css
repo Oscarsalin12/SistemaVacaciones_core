@@ -1,0 +1,21 @@
+/* Estilos para el módulo de Empleados */
+
+.empleados-container {
+    max-width: 1400px;
+    margin: 40px auto;
+}
+
+.profile-emp-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.emp-badge-vacaciones {
+    font-size: 1.1rem;
+    padding: 8px 16px;
+    border-radius: 20px;
+}

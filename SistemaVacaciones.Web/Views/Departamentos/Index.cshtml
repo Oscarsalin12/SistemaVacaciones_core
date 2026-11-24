@@ -1,0 +1,73 @@
+﻿@model List<SistemaVacaciones.Core.ViewModels.DepartamentosVM>
+
+@{
+    ViewBag.Title = "Departamentos";
+}
+
+<div class="content-box">
+    <div class="content-header">
+        Gestión de Departamentos
+    </div>
+
+    <div class="text-end mb-3">
+        <button class="btn btn-success" onclick="abrirModal(0)">Nuevo Departamento</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped w-100" id="tablaDepartamentos">
+            <thead>
+                <tr>
+                    <th>Clave</th>
+                    <th>Nombre</th>
+                    <th>Encargado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr id="fila-@item.Id">
+                        <td>@item.ClaveDep</td>
+                        <td class="text-start">@item.NombreDep</td>
+                        <td class="text-start">@item.NombreEmcargado</td>
+                        <td>
+                            <button class="btn btn-gradient btn-sm" onclick="abrirModal(@item.Id)">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarDep(@item.Id)">Eliminar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDepartamento" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header content-header m-0 mb-3" style="border-radius: 0;">
+                <h5 class="modal-title text-white" id="modalTitle">Departamento</h5>
+            </div>
+            <div class="modal-body" id="modalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalDepartamento').modal('hide')">Cerrar</button>
+                <button type="button" class="btn btn-gradient" onclick="guardar()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/departamentos.js"></script>
+    <script>
+        function abrirModal(id) {
+            abrirModalDepartamento(id, '@Url.Action("Create", "Departamentos")', '@Url.Action("Edit", "Departamentos")');
+        }
+        function guardar() {
+            guardarDepartamento('@Url.Action("Create", "Departamentos")', '@Url.Action("Edit", "Departamentos")');
+        }
+        function eliminarDep(id) {
+            eliminarDepartamento(id, '@Url.Action("Delete", "Departamentos")');
+        }
+    </script>
+}

@@ -1,0 +1,205 @@
+.toast-title {
+  font-weight: bold;
+}
+.toast-message {
+  -ms-word-wrap: break-word;
+  word-wrap: break-word;
+}
+.toast-message a,
+.toast-message label {
+  color: #ffffff;
+}
+.toast-message a:hover {
+  color: #cccccc;
+  text-decoration: none;
+}
+.toast-close-button {
+  position: relative;
+  right: -0.3em;
+  top: -0.3em;
+  float: right;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  -webkit-text-shadow: 0 1px 0 #ffffff;
+  text-shadow: 0 1px 0 #ffffff;
+  opacity: 0.8;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  filter: alpha(opacity=80);
+}
+.toast-close-button:hover,
+.toast-close-button:focus {
+  color: #000000;
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.4;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+  filter: alpha(opacity=40);
+}
+/*Additional properties for button version
+ iOS requires the button element instead of an anchor tag.
+ If you want the anchor version, it requires `href="#"`.*/
+button.toast-close-button {
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+}
+.toast-top-center {
+  top: 0;
+  right: 0;
+  width: 100%;
+}
+.toast-bottom-center {
+  bottom: 0;
+  right: 0;
+  width: 100%;
+}
+.toast-top-full-width {
+  top: 0;
+  right: 0;
+  width: 100%;
+}
+.toast-bottom-full-width {
+  bottom: 0;
+  right: 0;
+  width: 100%;
+}
+.toast-top-left {
+  top: 12px;
+  left: 12px;
+}
+.toast-top-right {
+  top: 12px;
+  right: 12px;
+}
+.toast-bottom-right {
+  right: 12px;
+  bottom: 12px;
+}
+.toast-bottom-left {
+  bottom: 12px;
+  left: 12px;
+}
+#toast-container {
+  position: fixed;
+  z-index: 999999;
+  /*overrides*/
+
+}
+#toast-container * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#toast-container > div {
+  position: relative;
+  overflow: hidden;
+  margin: 0 0 6px;
+  padding: 15px 15px 15px 50px;
+  width: 300px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
+  border-radius: 3px 3px 3px 3px;
+  background-position: 15px center;
+  background-repeat: no-repeat;
+  -moz-box-shadow: 0 0 12px #999999;
+  -webkit-box-shadow: 0 0 12px #999999;
+  box-shadow: 0 0 12px #999999;
+  color: #ffffff;
+  opacity: 0.8;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  filter: alpha(opacity=80);
+}
+#toast-container > :hover {
+  -moz-box-shadow: 0 0 12px #000000;
+  -webkit-box-shadow: 0 0 12px #000000;
+  box-shadow: 0 0 12px #000000;
+  opacity: 1;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  filter: alpha(opacity=100);
+  cursor: pointer;
+}
+    #toast-container > .toast-success {
+        background-color: #51A351 !important; /* Verde */
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADsSURBVEhL7ZaxSgNBFIa/O4lNLOziJtrY2NhY2PgJBo1E1iYWJiY2NhYWFtbGxs7Gxs7SxFJKL3vG9vdbxcyZnJ6uec8/u+fe8AE8hP4M1wBfwGkYBpwSboBq4BF4rvWQAM4jHsgg64n19hA1zj0RcrzACn8B4P+AjHAHPAj7oSU5BB2Wc4cA6r8CLfITpTtGSC+9jMktE2kP5Ht/PUfS3TC+9rFJzj1wjpRJYJz3cYwjP6l+u+MA+0QNZfRLb+O90G0H4q5TTi+aJ4r9Ep6Lj8FwBxbQQYiBtoAAAAASUVORK5CYII=") !important;
+    }
+ 
+    #toast-container > .toast-error {
+        background-color: #BD362F !important; /* Rojo */
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADqSURBVEhLrZaxSgNBFIa/U5sItbCxsVFsZWFhY2NjY2NjY2NjY9P+EpEW2t7u7u7u7u6yQcb2t5M5j3MzuzcwCMjT4kzwBNwA24A1ZgAHwQboP3UADuJ5fwKz3PCEQvRkuC1wBRtYQxG7jsxxLfxrkmwDXxWwh4Trq7EJR+Ih9DXRG5zE7/B2ThxlY3GHXc7iUifcbXyL1Lo64ZC3ATzVvJ6McU7NxHDhth36yfCy+T8kls8CD3xH2N8NoHE6oEc8ClpTAAAAAElFTkSuQmCC") !important;
+    }
+
+    #toast-container > .toast-info {
+        background-color: #2F96B4 !important; /* Azul */
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADsSURBVEhLrZaxSgNBFIa/04lDLFjY2FhY2NhY2FhY2NjY2NhY2N/EEpE7XZ3d3d3d3dXZBzPzQk3wBNwA24A1ZgAHwQbIJfUADuJ57yKz3PCIhvRguB1wBRsYgxG7jsxRLPxrkmwDXxWwR4Tnq6EJR+Ih9DXRG5zE7/B2ThxlY3GHXc7iUifcbXyL1Lo64ZC3ATzVvJ6McU7NxHDhth36yfCy+T8kls8CD3xH2N8NoHE6oEc8ClpTAAAAAElFTkSuQmCC") !important;
+    }
+
+    #toast-container > .toast-warning {
+        background-color: #F89406 !important; /* Naranja */
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADrSURBVEhLrZaxSgNBFIa/04lDLFjY2FhY2NhY2FhY2NjY2NhY2N/EEpE7XZ3d3d3d3dXZBzPzQk3wBNwA24A1ZgAHwQbIJfUADuJ57yKz3PCIhvRguB1wBRsYgxG7jsxRLPxrkmwDXxWwR4Tnq6EJR+Ih9DXRG5zE7/B2ThxlY3GHXc7iUifcbXyL1Lo64ZC3ATzVvJ6McU7NxHDhth36yfCy+T8kls8CD3xH2N8NoHE6oEc8ClpTAAAAAElFTkSuQmCC") !important;
+    }
+
+#toast-container.toast-top-center > div,
+#toast-container.toast-bottom-center > div {
+  width: 300px;
+  margin: auto;
+}
+#toast-container.toast-top-full-width > div,
+#toast-container.toast-bottom-full-width > div {
+  width: 96%;
+  margin: auto;
+}
+.toast {
+  background-color: #030303;
+}
+.toast-success {
+  background-color: #51a351;
+}
+.toast-error {
+  background-color: #bd362f;
+}
+.toast-info {
+  background-color: #2f96b4;
+}
+.toast-warning {
+  background-color: #f89406;
+}
+.toast-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  background-color: #000000;
+  opacity: 0.4;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+  filter: alpha(opacity=40);
+}
+/*Responsive Design*/
+@media all and (max-width: 240px) {
+  #toast-container > div {
+    padding: 8px 8px 8px 50px;
+    width: 11em;
+  }
+  #toast-container .toast-close-button {
+    right: -0.2em;
+    top: -0.2em;
+  }
+}
+@media all and (min-width: 241px) and (max-width: 480px) {
+  #toast-container > div {
+    padding: 8px 8px 8px 50px;
+    width: 18em;
+  }
+  #toast-container .toast-close-button {
+    right: -0.2em;
+    top: -0.2em;
+  }
+}
+@media all and (min-width: 481px) and (max-width: 768px) {
+  #toast-container > div {
+    padding: 15px 15px 15px 50px;
+    width: 25em;
+  }
+}

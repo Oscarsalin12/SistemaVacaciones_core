@@ -1,0 +1,123 @@
+﻿@model Proyecto_Estadias.Models.Empleados
+
+@{
+    ViewBag.Title = "Editar Empleado";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<style>
+    body {
+        background: white;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .edit-container {
+        background-color: white;
+        padding: 30px;
+        margin: 80px auto;
+        border-radius: 15px;
+        max-width: 700px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .edit-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        text-align: center;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border-color: #6F42C1;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a379e;
+            border-color: #5a379e;
+        }
+
+    .btn-default {
+        border-radius: 8px;
+    }
+</style>
+
+<div class="edit-container">
+    <div class="edit-header">
+        Editar Empleado
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group mt-3">
+            @Html.LabelFor(model => model.NumEmpleado)
+            @Html.EditorFor(model => model.NumEmpleado, new { htmlAttributes = new { @class = "form-control", placeholder = "Numero del empleado" } })
+            @Html.ValidationMessageFor(model => model.NumEmpleado, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mt-3">
+            @Html.LabelFor(model => model.Nombre)
+            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control", placeholder = "Nombre del empleado" } })
+            @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mt-3">
+            @Html.LabelFor(model => model.UsuarioEmpleado)
+            @Html.EditorFor(model => model.UsuarioEmpleado, new { htmlAttributes = new { @class = "form-control", placeholder = "Nombre de Usuario" } })
+            @Html.ValidationMessageFor(model => model.UsuarioEmpleado, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaIDeIngreso, "Fecha de Ingreso")
+            @Html.TextBoxFor(model => model.FechaIDeIngreso, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.FechaIDeIngreso, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdEmpresa, "Empresa")
+            @Html.DropDownListFor(model => model.IdEmpresa, (SelectList)ViewBag.Empresas, "Seleccione una empresa", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IdDepartamento, "Departamento")
+            @Html.DropDownListFor(model => model.IdDepartamento, (SelectList)ViewBag.Departamentos, "Seleccione un departamento", new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DiasLaboralesPorSemana, "Días Laborales por Semana")
+            @Html.DropDownListFor(model => model.DiasLaboralesPorSemana,
+                new SelectList(new[] {
+                    new SelectListItem { Value = "5", Text = "Lunes a Viernes (5 días)" },
+                    new SelectListItem { Value = "6", Text = "Lunes a Sábado (6 días)" }
+                }, "Value", "Text", Model.DiasLaboralesPorSemana),
+                "Seleccione días", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.DiasLaboralesPorSemana, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Estado, "Editar Estado")
+            @Html.DropDownListFor(model => model.Estado,
+                new SelectList(new[] {
+                    new SelectListItem { Value = "Activo", Text = "Activo" },
+                    new SelectListItem { Value = "Inactivo", Text = "Inactivo" }
+                }, "Value", "Text", Model.Estado),
+                "Seleccione el estado", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group text-center mt-4">
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+            @Html.ActionLink("Cancelar", "ListaEmpleadosSubempresa", "Auth", new { idSub = Model.IdEmpresa }, new { @class = "btn btn-default ml-2" })
+        </div>
+    }
+</div>

@@ -1,0 +1,104 @@
+﻿@model SistemaVacaciones.Core.Entities.Empresa
+
+@{
+    ViewBag.Title = "Insertar Empresa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<style>
+    body {
+        background: white;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .empresa-container {
+        background-color: white;
+        padding: 30px;
+        margin: 80px auto;
+        border-radius: 15px;
+        max-width: 700px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .empresa-header {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        color: white;
+        text-align: center;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(to right, #0000ff, #4b0082);
+        border-color: #6F42C1;
+        border-radius: 8px;
+    }
+
+        .btn-primary:hover {
+            background-color: #5a379e;
+            border-color: #5a379e;
+        }
+
+    .btn-default {
+        border-radius: 8px;
+        margin-left: 10px;
+    }
+
+    .text-danger {
+        font-size: 14px;
+    }
+</style>
+
+<div class="empresa-container">
+    <div class="empresa-header">
+        Registrar Nueva Empresa
+    </div>
+
+    @using (Html.BeginForm("InsertarEmpresa", "Empresas", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Nombre)
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", placeholder = "Nombre de la empresa" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Rfc)
+            @Html.TextBoxFor(m => m.Rfc, new { @class = "form-control", placeholder = "RFC" })
+            @Html.ValidationMessageFor(m => m.Rfc, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Direccion)
+            @Html.TextBoxFor(m => m.Direccion, new { @class = "form-control", placeholder = "Dirección" })
+            @Html.ValidationMessageFor(m => m.Direccion, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            <label for="archivoLogo">Logo de la empresa</label>
+            <input type="file" name="archivoLogo" class="form-control" />
+        </div>
+
+        <div class="form-group text-center mt-4">
+            <button type="submit" class="btn btn-primary">Guardar Empresa</button>
+            @Html.ActionLink("Ver Empresas", "Perfil", "Auth", null, new { @class = "btn btn-default btn-secondary" })
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
